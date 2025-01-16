@@ -38,8 +38,7 @@ const PRODUCT_METAOBJECT_QUERY = `
         query getProductMetaobjects($id: ID!) {
             product(id: $id) {
                 id
-                metafield(namespace: "custom"
-                , key: "delivery_estimated") {
+                metafield(namespace: "custom", key: "delivery_estimated") {
                     id
                     namespace
                     key
@@ -89,31 +88,55 @@ const CUSTOMER_CREATE_MUTATION = `
         }
 `
 
-const CUSTOMER_LOGIN = `
-        mutation SignInWithEmailAndPassword(
-            $email: String!, 
-            $password: String!,
-        ) {
-            customerAccessTokenCreate(input: { 
-                email: $email, 
-                password: $password,
-            }) {
-                customerAccessToken {
-                    accessToken
-                    expiresAt
-                }
-                customerUserErrors {
-                    code
-                    message
+// const CUSTOMER_LOGIN = `
+//         mutation SignInWithEmailAndPassword(
+//             $email: String!, 
+//             $password: String!,
+//         ) {
+//             customerAccessTokenCreate(input: { 
+//                 email: $email, 
+//                 password: $password,
+//             }) {
+//                 customerAccessToken {
+//                     accessToken
+//                     expiresAt
+//                 }
+//                 customerUserErrors {
+//                     code
+//                     message
+//                 }
+//             }
+//         }
+// `
+const GET_MARKET_QUERY = `
+    query Markets {
+        markets(first: 4) {
+            nodes {
+                name
+                enabled
+                webPresence {
+                    rootUrls {
+                        locale
+                        url
+                    }
                 }
             }
         }
+    }
 `
-
+const GET_MARKET_QUERY_1 = `
+    query Markets {
+        backupRegion {
+            id
+            name
+        }
+    }
+`
 module.exports = {
     ALL_COLLECTION_QUERY,
     PRODUCT_METAOBJECT_QUERY,
     GET_HOMEPAGE_QUERY,
     CUSTOMER_CREATE_MUTATION,
-    CUSTOMER_LOGIN
+    GET_MARKET_QUERY,
+    GET_MARKET_QUERY_1
 } 

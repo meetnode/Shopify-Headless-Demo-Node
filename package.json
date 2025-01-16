@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "dotenvx run -- nodemon -e js,jade,css ./bin/www"
+    "start": "dotenvx run -- nodemon -e js,jade,css ./bin/www",
+    "inspact": "dotenvx run -- nodemon --inspect ./bin/www"
   },
   "dependencies": {
     "@dotenvx/dotenvx": "^1.31.3",

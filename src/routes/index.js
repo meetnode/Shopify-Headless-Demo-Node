@@ -19,4 +19,6 @@ router.post('/customer-login', indexController.loginCustomer)
 
 router.get('/checkout', indexController.checkout)
 
+router.get('/market', indexController.market)
+
 module.exports = router;

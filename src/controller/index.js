@@ -5,7 +5,7 @@ const {
     PRODUCT_METAOBJECT_QUERY,
     GET_HOMEPAGE_QUERY,
     CUSTOMER_CREATE_MUTATION,
-    CUSTOMER_LOGIN
+    GET_MARKET_QUERY
 } = require('../constants/query');
 const customers = require('../models/customers');
 
@@ -193,7 +193,8 @@ module.exports = {
                 }
             };
 
-            const checkout = await shopify.order.create(params);
+            // const checkout = await shopify.order.create(params);
+            const checkout = await shopify.checkout.create(params);
             // const checkout = await shopify.payment.list()
             res.status(200).json({
                 checkout
@@ -202,7 +203,26 @@ module.exports = {
             console.error("Error creating checkout:", error);
             res.status(400).json({ error: error.message });
         }
+    },
+    async market(req, res) {
+        try {
+            const data = await shopify.graphql(GET_MARKET_QUERY);
+            let lang = []
+            const accessToken = await shopify.storefrontAccessToken.list()
+            console.log(accessToken, "accessToken")
+            const response = data.markets.nodes.filter(market => market.enabled).map((market) => {
+                const rootUrls = market.webPresence
+                const locale = rootUrls['rootUrls'].map(url => url.locale)
+                lang = [...lang, ...locale]
+                return {
+                    name: market.name,
+                    locale: locale.length > 1 ? locale : locale[0],
+                }
+            })
+            console.log(JSON.stringify(data), "response")
+            res.status(200).json({ message: response, languages: [...new Set(lang)] })
+        } catch (error) {
+            res.status(400).json({ error: error.message })
+        }
     }
-
-
 }
